@@ -1,0 +1,291 @@
+PROMPT **** 102106751
+PROMPT **** 101776784 
+PROMPT **** 102111726
+PROMPT **** ASSIGNMENT 1 SCRIPT // GROUP 3
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **DROP TABLES (expect errors if no table exists)
+PROMPT **----------------------------------------------------------------------------
+
+DROP TABLE work_session;
+DROP TABLE ALLOCATION;
+DROP TABLE BOOK;
+DROP TABLE AUTHOR;
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **PART 1B CREATE TABLES
+PROMPT **----------------------------------------------------------------------------
+
+PROMPT ** creating the book table
+CREATE TABLE book (
+	bid NUMBER(4),
+	title VARCHAR2(30) NOT NULL,
+	sellingprice NUMBER(6,2),
+	CHECK (sellingprice>0),
+PRIMARY KEY(bid)
+);
+
+PROMPT ** creating the author table
+CREATE TABLE author (
+	authorid NUMBER(4),
+	fname VARCHAR2(30),
+	sname VARCHAR2(30),
+UNIQUE(fname,sname),
+PRIMARY KEY(authorid)
+);
+
+PROMPT ** creating the allocation table
+CREATE TABLE allocation (
+	bid NUMBER(4),
+	authorid NUMBER(4),
+	payrate NUMBER(6,2),
+	CHECK (payrate>=1 AND payrate<=80),
+PRIMARY KEY(authorid,bid),
+FOREIGN KEY(authorid) REFERENCES author,
+FOREIGN KEY(bid) REFERENCES book
+);
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **TASK 1C
+PROMPT **----------------------------------------------------------------------------
+
+PROMPT ** inserting data into the author table
+INSERT INTO author VALUES(40,'Ziggle','Carl');
+INSERT INTO author VALUES(42,'Taylor','Tayla');
+INSERT INTO author VALUES(44,'Merdovic','Damir');
+INSERT INTO author VALUES(45,'Grossman','Paul');
+INSERT INTO author VALUES(47,'Ziggle','Annie');
+INSERT INTO author VALUES(48,'Zhao','Cheng');
+INSERT INTO author VALUES(50,'Phan','Annie');
+
+PROMPT ** inserting data into the book table
+INSERT INTO book VALUES(101,'Knitting with Dog Hair',6.99);
+INSERT INTO book VALUES(105,'Avoiding Large Ships',11);
+INSERT INTO book VALUES(107,'Dealing with stuff',6.5);
+INSERT INTO book VALUES(108,'Teach fish to sing',10.99);
+INSERT INTO book VALUES(109,'Guide to hands free texting',10.5);
+INSERT INTO book VALUES(113,'You call that a lecture?',17.5);
+
+PROMPT ** inserting data into the allocation table
+INSERT INTO allocation VALUES(101,42,25);
+INSERT INTO allocation VALUES(101,45,32);
+INSERT INTO allocation VALUES(108,47,35);
+INSERT INTO allocation VALUES(113,48,40);
+INSERT INTO allocation VALUES(109,47,42);
+INSERT INTO allocation VALUES(105,42,26);
+INSERT INTO allocation VALUES(105,47,25);
+INSERT INTO allocation VALUES(105,40,19);
+INSERT INTO allocation VALUES(107,42,35);
+INSERT INTO allocation VALUES(108,40,45);
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **DISPLAY INFORMATION
+PROMPT **----------------------------------------------------------------------------
+
+SELECT * FROM author;
+SELECT * FROM book;
+SELECT * FROM allocation;
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **PART 1D DEMONSTRATION OF CONSTRAINTS BEING VIOLATED
+PROMPT **----------------------------------------------------------------------------
+PROMPT ** 1D Statement 1
+INSERT INTO author VALUES(51,'Phan','Annie');
+
+PROMPT ** 1D Statement 2
+INSERT INTO book VALUES(101,'',3.50);
+
+PROMPT ** 1D Statement 3
+INSERT INTO book VALUES(101,'stress as a result of work',-3.50);
+
+PROMPT ** 1D Statement 4
+INSERT INTO allocation VALUES(108,40,81);
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **PART 1E SQL QUERIES
+PROMPT **----------------------------------------------------------------------------
+PROMPT ** 1E Query 1
+SELECT * FROM allocation;
+
+PROMPT ** 1E Query 2
+SELECT B.bid, B.title, A.authorid, A.payrate
+FROM book B
+INNER JOIN allocation A
+ON B.bid=A.bid;
+
+PROMPT ** 1E Query 3
+SELECT B.bid, B.title, B.sellingprice, AU.authorid, AU.sname, AL.payrate
+FROM 
+allocation AL
+INNER JOIN author AU
+ON AL.authorid=AU.authorid
+INNER JOIN book B
+ON AL.bid=B.bid;
+
+PROMPT ** 1E Query 4
+SELECT AVG(sellingprice)
+FROM book;
+
+PROMPT ** Query 5
+SELECT bid, title, sellingprice
+FROM book
+WHERE sellingprice<(SELECT AVG(sellingprice) FROM book);
+
+PROMPT ** 1E Query 6
+SELECT bid,count(*)
+FROM allocation
+GROUP BY bid
+ORDER BY 2;
+
+PROMPT ** 1E Query 7
+SELECT B.bid, B.title, COUNT(AL.bid)
+FROM book B
+INNER JOIN allocation AL
+ON B.bid=AL.bid
+GROUP BY B.bid,B.title;
+
+PROMPT ** 1E Query 8
+SELECT B.bid, B.title, COUNT(AL.bid)
+FROM book B
+INNER JOIN allocation AL
+ON B.bid=AL.bid
+GROUP BY B.bid,B.title
+HAVING COUNT(AL.bid)>1;
+
+PROMPT ** 1E Query 9
+SELECT A.authorid, A.fname, A.sname, AL.bid
+FROM allocation AL
+INNER JOIN author A
+ON AL.authorid=A.authorid;
+
+PROMPT ** 1E Query 10
+SELECT AU.authorid, AU.sname, AU.fname, AL.bid
+FROM author AU
+LEFT OUTER JOIN allocation AL
+ON AU.authorid = AL.authorid
+ORDER BY AU.authorid, AL.bid;
+
+PROMPT ** 1E Query 11
+SELECT AU.authorid, AU.sname, AU.fname, AL.bid, B.title
+FROM author AU
+LEFT OUTER JOIN allocation AL
+ON AU.authorid = AL.authorid
+LEFT OUTER JOIN book B
+ON B.bid=AL.bid
+ORDER BY AU.authorid,B.bid;
+
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **TASK 2
+PROMPT **----------------------------------------------------------------------------
+
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **TASK 2 A Create work_session Table
+PROMPT **----------------------------------------------------------------------------
+
+DROP TABLE work_session;
+CREATE TABLE work_session (
+bid NUMBER(4),
+authorid NUMBER(4),
+workyear NUMBER(4),
+workweek NUMBER(2),
+workhours NUMBER(4,2),
+
+CONSTRAINT CHK_workyear CHECK (
+workyear>=2011 AND workyear<=2013),
+
+CONSTRAINT CHK_workweek CHECK (
+workweek>=1 AND workweek<=52),
+
+CONSTRAINT CHK_workhours CHECK (
+workhours>=0.5 AND workhours<=99.99),
+
+PRIMARY KEY(workyear, workweek, bid, authorid),
+FOREIGN KEY(authorid,bid) REFERENCES allocation
+);
+
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **TASK 2 B enter data
+PROMPT **----------------------------------------------------------------------------
+
+INSERT INTO work_session VALUES(101,42,2012,5,5);
+INSERT INTO work_session VALUES(101,42,2012,6,4);
+INSERT INTO work_session VALUES(101,42,2012,7,5);
+INSERT INTO work_session VALUES(101,45,2012,5,10);
+INSERT INTO work_session VALUES(101,45,2012,7,10);
+INSERT INTO work_session VALUES(105,42,2012,5,6);
+INSERT INTO work_session VALUES(105,47,2012,4,8);
+INSERT INTO work_session VALUES(105,47,2012,6,7);
+INSERT INTO work_session VALUES(105,47,2012,8,8);
+INSERT INTO work_session VALUES(108,40,2011,52,4);
+INSERT INTO work_session VALUES(108,40,2012,4,15);
+INSERT INTO work_session VALUES(108,40,2012,6,6);
+INSERT INTO work_session VALUES(108,47,2012,8,4);
+INSERT INTO work_session VALUES(109,47,2012,5,5);
+INSERT INTO work_session VALUES(109,47,2012,6,5);
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **TASK 2 C constraint testing
+PROMPT **----------------------------------------------------------------------------
+
+PROMPT **TASK 2 C
+PROMPT **bid/authid combination does NOT exist in parent 
+INSERT INTO work_session VALUES(101,48,2012,1,1);
+	
+PROMPT **bid/authid combination does NOT exist in parent 
+INSERT INTO work_session VALUES(109,42,2012,2,2);
+
+PROMPT **out of range workyear 
+INSERT INTO work_session VALUES(101,42,2014,9,6);
+	
+PROMPT **out of range workweek
+INSERT INTO work_session VALUES(101,45,2012,55,3);
+
+PROMPT **out of range workhours		
+INSERT INTO work_session VALUES(108,40,2012,7,120);	
+
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **TASK 2D Queries (Q5 incomplete)
+PROMPT **----------------------------------------------------------------------------
+PROMPT ** 2D Query 1
+SELECT authorid,workyear,workweek,workhours
+FROM work_session
+ORDER BY 1,2,3;	
+
+PROMPT ** 2D Query 2
+SELECT authorid,workyear,sum(workhours)
+FROM work_session
+GROUP BY authorid,workyear
+ORDER BY 2 DESC;
+
+PROMPT ** 2D Query 3 ???
+SELECT bid,authorid,workyear,workweek,workhours
+FROM work_session
+ORDER BY 1,2,3,4,5;
+
+PROMPT ** 2D Query 4
+SELECT bid,authorid,workyear,sum(workhours) AS "Total Hours"
+FROM work_session
+GROUP BY bid,authorid,workyear
+ORDER BY 1 ASC;
+
+PROMPT ** 2D Query 5
+SELECT W.bid,W.authorid,W.workyear,SUM(W.workhours),SUM(W.workhours*A.payrate) As "Total pay"
+FROM work_session W
+INNER JOIN allocation A
+ON W.bid=A.bid AND w.authorid=A.authorid
+GROUP BY W.bid,W.authorid,W.workyear
+ORDER BY W.bid,W.authorid,W.workyear;
+
+PROMPT **----------------------------------------------------------------------------
+PROMPT **TASK 3 A drop all the tables
+PROMPT **----------------------------------------------------------------------------
+DROP TABLE work_session;
+DROP TABLE allocation;
+DROP TABLE book;
+DROP TABLE author;		
+
+PROMPT ** finished script...																													

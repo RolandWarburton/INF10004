@@ -1,0 +1,31 @@
+23. List the RELYEAR and TITLE columns of all rows in ascending RELYEAR sequence.
+	SELECT relyear, title FROM movie ORDER BY relyear ASC
+
+
+25. List the MOVIE NO, TITLE , IMDB_SCORE and RELYEAR of every row in descending IMDB_SCORE sequence (highest score first through to the lowest score).
+	SELECT MOVIENO, TITLE, IMDB_SCORE, RELYEAR FROM MOVIE ORDER BY IMDB_SCORE DESC
+
+
+26. List TITLE and RATING of all movies that have a PGrating.
+	SELECT TITLE, RATING_CODE FROM MOVIE WHERE RATING_CODE='PG'
+
+
+27. List TITLE and RELYEAR of all moviesmade after 1999.
+	SELECT TITLE, RELYEAR FROM MOVIE WHERE RELYEAR > 1999
+
+28. List TITLE and RELYEAR of all moviesmade after 1999.The result set must be in Ascedning RELYEAR sequence.
+	SELECT TITLE, RELYEAR FROM MOVIE WHERE RELYEAR > '1999' ORDER BY RELYEAR ASC
+
+
+33. List TITLE and RUNTIME of all moviesthat are shorter than 100 minutesin ascending TITLE sequence.
+	SELECT TITLE, RUNTIME FROM MOVIE WHERE RUNTIME < 100 ORDER BY RUNTIME ASC
+
+34. List all details of moviesthat have an imdb_score of 5.0 or below in ascending RELYEAR sequence.
+	SELECT * FROM MOVIE WHERE IMDB_SCORE < 5.0 ORDER BY RELYEAR ASC
+
+
+//REFER TO 'CAR_SCRIPT' For Part-C
+
+
+
+//END OF DOCUMENT

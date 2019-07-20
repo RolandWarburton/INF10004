@@ -1,0 +1,312 @@
+PROMPT ** DROP TABLES
+
+DROP TABLE gift_selected;
+DROP TABLE gift_allocation;
+DROP TABLE expert_allocation;
+DROP TABLE brocure_request;
+DROP TABLE payment;
+DROP TABLE gift;
+DROP TABLE wine_expert;
+DROP TABLE booking;
+DROP TABLE tour_offering;
+DROP TABLE customer;
+DROP TABLE tour;
+
+PROMPT ** CREATE TABLES
+
+CREATE TABLE tour (
+	t_code VARCHAR2(64),
+	shortname VARCHAR2(64),
+	description VARCHAR2(256),
+	price NUMBER(10),
+PRIMARY KEY(t_code)
+);
+
+CREATE TABLE customer (
+	c_id VARCHAR2(64),
+	fname VARCHAR2(64),
+	lname VARCHAR2(64),
+	cadd VARCHAR2(64),
+	cph NUMBER(10),
+PRIMARY KEY(c_id)
+);
+
+CREATE TABLE tour_offering (
+	t_code VARCHAR2(64),
+	description VARCHAR2(256),
+	t_date DATE,
+	price NUMBER(10),
+PRIMARY KEY(t_date,t_code)
+);
+
+CREATE TABLE booking (
+	t_date DATE,
+	t_code VARCHAR2(64),
+	c_id VARCHAR2(64),
+PRIMARY KEY (t_date,t_code,c_id),
+FOREIGN KEY (c_id) REFERENCES customer,
+FOREIGN KEY (t_date,t_code) REFERENCES tour_offering
+);
+
+CREATE TABLE wine_expert (
+	e_id VARCHAR2(64),
+	efname VARCHAR2(64),
+	elname VARCHAR2(64),
+	ephone NUMBER(10),
+PRIMARY KEY(e_id)
+);
+
+CREATE TABLE gift (
+	g_id VARCHAR2(64),
+	gname VARCHAR2(64),
+PRIMARY KEY(g_id)
+);
+
+
+CREATE TABLE payment (
+	t_date DATE,
+	t_code VARCHAR2(64),
+	c_id VARCHAR2(64),
+	amount NUMBER(10),
+	pdate DATE,
+	ptype NUMBER(10),
+PRIMARY KEY(c_id,pdate,t_code,t_date),
+FOREIGN KEY(c_id) REFERENCES customer,
+FOREIGN KEY (t_date,t_code) REFERENCES tour_offering
+);
+
+CREATE TABLE brocure_request (
+	request_date DATE,
+	c_id VARCHAR2(64),
+	t_code VARCHAR2(64),
+PRIMARY KEY(request_date,c_id,t_code),
+FOREIGN KEY(t_code) REFERENCES tour,
+FOREIGN KEY(c_id) REFERENCES customer
+);
+
+CREATE TABLE expert_allocation (
+	e_id VARCHAR2(64),
+	t_date DATE,
+	t_code VARCHAR2(256),
+PRIMARY KEY(t_date,t_code,e_id),
+FOREIGN KEY(e_id) REFERENCES wine_expert
+);
+
+
+CREATE TABLE gift_allocation (
+	g_id VARCHAR2(64),
+	t_date DATE,
+	t_code VARCHAR2(64),
+PRIMARY KEY(g_id,t_date,t_code),
+FOREIGN KEY(g_id) REFERENCES gift,
+FOREIGN KEY (t_date,t_code) REFERENCES tour_offering
+);
+
+CREATE TABLE gift_selected (
+	c_id VARCHAR2(64),
+	t_date DATE,
+	t_code VARCHAR2(64),
+	g_id VARCHAR2(64),
+PRIMARY KEY(c_id,t_date,t_code,g_id),
+FOREIGN KEY(c_id) REFERENCES customer,
+FOREIGN KEY (t_date,t_code) REFERENCES tour_offering
+);
+
+
+PROMPT ** INSERT SAMPLE DATA
+
+PROMPT ** tour
+INSERT INTO  tour VALUES('B1','Wine Appreciation','description',300);
+INSERT INTO  tour VALUES('R2','Red Wine Tour','description',200);
+INSERT INTO  tour VALUES('W1','White Wine Tour','description',220);
+INSERT INTO  tour VALUES('S1','Sparkling Wine Tour','description',250);
+
+PROMPT ** wine_expert
+INSERT INTO  wine_expert VALUES('5','Sue','Davies','92142222');
+INSERT INTO   wine_expert VALUES('1','Geoff','Millar','92141111');
+INSERT INTO   wine_expert VALUES('8','Hillary','Cork','92144444');
+INSERT INTO   wine_expert VALUES('12','Penny','Folds','92143333');
+
+PROMPT ** gifts
+insert into gift VALUES ('G01','Collectors Red Wine Glass');
+insert into gift VALUES ('G02','Cork Screw');
+insert into gift VALUES ('G03','Sherry Glass');
+insert into gift VALUES ('G04','White Wine Glass');
+insert into gift VALUES ('G05','Guide to Wine Tasting Handbook');
+insert into gift VALUES ('G06','Winery Guide Handbook');
+insert into gift VALUES ('G07','Wine for Women Handbook');
+insert into gift VALUES ('G08','Wine Museum Voucher');
+insert into gift VALUES ('G09','Collectors Sparkling Wine Glass');
+insert into gift VALUES ('G10','Commemorative Cup');
+
+PROMPT ** tour_offering
+INSERT INTO  tour_offering VALUES('R2', 'Red Wine Tour',TO_DATE('2017/10/07', 'YYYY/MM/DD'),170);
+INSERT INTO gift_allocation VALUES('G01',TO_DATE('2017/10/07', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G02',TO_DATE('2017/10/07', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G03',TO_DATE('2017/10/07', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G04',TO_DATE('2017/10/07', 'YYYY/MM/DD'),'R2');
+
+INSERT INTO  tour_offering VALUES('B1', 'Wine Appreciation',TO_DATE('2017/11/11', 'YYYY/MM/DD'),270);
+INSERT INTO gift_allocation VALUES('G06',TO_DATE('2017/11/11', 'YYYY/MM/DD'),'B1');
+INSERT INTO gift_allocation VALUES('G05',TO_DATE('2017/11/11', 'YYYY/MM/DD'),'B1');
+
+INSERT INTO  tour_offering VALUES('B1','Wine Appreciation',TO_DATE('2018/02/18', 'YYYY/MM/DD'),280);
+INSERT INTO gift_allocation VALUES('G01',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+INSERT INTO gift_allocation VALUES('G03',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+INSERT INTO gift_allocation VALUES('G05',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+INSERT INTO gift_allocation VALUES('G07',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+
+INSERT INTO  tour_offering VALUES('R2','Red Wine Tour',TO_DATE('2018/02/18', 'YYYY/MM/DD'),190);
+INSERT INTO gift_allocation VALUES('G01',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G06',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G07',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G09',TO_DATE('2018/02/18', 'YYYY/MM/DD'),'R2');
+
+INSERT INTO  tour_offering VALUES('R2','Red Wine Tour',TO_DATE('2018/03/07', 'YYYY/MM/DD'),200);
+INSERT INTO gift_allocation VALUES('G02',TO_DATE('2018/03/07', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G06',TO_DATE('2018/03/07', 'YYYY/MM/DD'),'R2');
+INSERT INTO gift_allocation VALUES('G08',TO_DATE('2018/03/07', 'YYYY/MM/DD'),'R2');
+
+INSERT INTO  tour_offering VALUES('B1','Wine Appreciation',TO_DATE('2018/03/14', 'YYYY/MM/DD'),300);
+INSERT INTO gift_allocation VALUES('G04',TO_DATE('2018/03/14', 'YYYY/MM/DD'),'B1');
+INSERT INTO gift_allocation VALUES('G05',TO_DATE('2018/03/14', 'YYYY/MM/DD'),'B1');
+INSERT INTO gift_allocation VALUES('G06',TO_DATE('2018/03/14', 'YYYY/MM/DD'),'B1');
+
+INSERT INTO  tour_offering VALUES('W1','White Wine Tour',TO_DATE('2018/06/03', 'YYYY/MM/DD'),200);
+INSERT INTO gift_allocation VALUES('G01',TO_DATE('2018/06/03', 'YYYY/MM/DD'),'W1');
+INSERT INTO gift_allocation VALUES('G04',TO_DATE('2018/06/03', 'YYYY/MM/DD'),'W1');
+INSERT INTO gift_allocation VALUES('G06',TO_DATE('2018/06/03', 'YYYY/MM/DD'),'W1');
+
+INSERT INTO  tour_offering VALUES('S1','Sparkling Wine Tour',TO_DATE('2018/10/27', 'YYYY/MM/DD'),250);
+INSERT INTO gift_allocation VALUES('G02',TO_DATE('2018/10/27', 'YYYY/MM/DD'),'S1');
+INSERT INTO gift_allocation VALUES('G04',TO_DATE('2018/10/27', 'YYYY/MM/DD'),'S1');
+INSERT INTO gift_allocation VALUES('G09',TO_DATE('2018/10/27', 'YYYY/MM/DD'),'S1');
+
+INSERT INTO  tour_offering VALUES('W1','White Wine Tour',TO_DATE('2018/10/29', 'YYYY/MM/DD'),220);
+INSERT INTO gift_allocation VALUES('G01',TO_DATE('2018/10/29', 'YYYY/MM/DD'),'W1');
+INSERT INTO gift_allocation VALUES('G05',TO_DATE('2018/10/29', 'YYYY/MM/DD'),'W1');
+INSERT INTO gift_allocation VALUES('G06',TO_DATE('2018/10/29', 'YYYY/MM/DD'),'W1');
+INSERT INTO gift_allocation VALUES('G09',TO_DATE('2018/10/29', 'YYYY/MM/DD'),'W1');
+
+PROMPT ** customer
+insert into customer VALUES ('C123','Joel','Warren','7 Bluff Rd',92142277);
+insert into customer VALUES ('C218','Sue','Armstrong','1 High St',92149911);
+insert into customer VALUES ('C178','Grant ','Simpson','23 Wall St ',92133311);
+insert into customer VALUES ('C191','Sarah','Charter','19 Hill Ave',92134477);
+insert into customer VALUES ('C334','Helen','Chin','6 Red Rd',92145500);
+insert into customer VALUES ('C367','Ryan','Chin','6 Red Rd',92145522);
+insert into customer VALUES ('C555','Ted','Smith','7 John St',92148000);
+insert into customer VALUES ('C078','Clare','Watts','15 Dale Rd',92141166);
+insert into customer VALUES ('C267','Karin','Black','1 Black St',92148822);
+insert into customer VALUES ('C225','Ziggy','Lee','17 Low St',92149944);
+insert into customer VALUES ('C215','Henry','Ryde ','8 White St 9',92146666);
+
+PROMPT ** booking
+PROMPT ** tour 1
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1','C123');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1','C218');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1','C178');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1','C191');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1','C334');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1','C367');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1','C555');
+PROMPT ** tour 1 experts
+INSERT INTO expert_allocation VALUES(12,TO_DATE('2018/10/07', 'YYYY/MM/DD'),'B1');
+INSERT INTO expert_allocation VALUES(1,TO_DATE('2018/10/07', 'YYYY/MM/DD'),'B1');
+PROMPT ** tour 2
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'R2','C078');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'R2','C267');
+INSERT INTO booking VALUES(TO_DATE('2018/02/18', 'YYYY/MM/DD'),'R2','C225');
+PROMPT ** tour 2 experts
+INSERT INTO expert_allocation VALUES(1,TO_DATE('2018/11/11', 'YYYY/MM/DD'),'B1');
+PROMPT ** tour 3
+INSERT INTO booking VALUES(TO_DATE('2018/03/07', 'YYYY/MM/DD'),'R2','C218');
+INSERT INTO booking VALUES(TO_DATE('2018/03/07', 'YYYY/MM/DD'),'R2','C191');
+INSERT INTO booking VALUES(TO_DATE('2018/03/07', 'YYYY/MM/DD'),'R2','C123');
+PROMPT ** tour 3 experts
+INSERT INTO expert_allocation VALUES(8,TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+INSERT INTO expert_allocation VALUES(5,TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+PROMPT ** tour 4
+INSERT INTO booking VALUES(TO_DATE('2018/06/03', 'YYYY/MM/DD'),'W1','C078');
+INSERT INTO booking VALUES(TO_DATE('2018/06/03', 'YYYY/MM/DD'),'W1','C123');
+INSERT INTO booking VALUES(TO_DATE('2018/06/03', 'YYYY/MM/DD'),'W1','C225');
+INSERT INTO booking VALUES(TO_DATE('2018/06/03', 'YYYY/MM/DD'),'W1','C367');
+PROMPT ** tour 4 experts
+INSERT INTO expert_allocation VALUES(12,TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+PROMPT ** tour 5
+INSERT INTO booking VALUES(TO_DATE('2017/11/11', 'YYYY/MM/DD'),'B1','C191');
+INSERT INTO booking VALUES(TO_DATE('2017/11/11', 'YYYY/MM/DD'),'B1','C555');
+INSERT INTO booking VALUES(TO_DATE('2017/11/11', 'YYYY/MM/DD'),'B1','C267');
+PROMPT ** tour 5 experts
+INSERT INTO expert_allocation VALUES(1,TO_DATE('2018/03/07', 'YYYY/MM/DD'),'B1');
+PROMPT ** tour 6
+INSERT INTO booking VALUES(TO_DATE('2017/10/07', 'YYYY/MM/DD'),'R2','C225');
+INSERT INTO booking VALUES(TO_DATE('2017/10/07', 'YYYY/MM/DD'),'R2','C078');
+INSERT INTO booking VALUES(TO_DATE('2017/10/07', 'YYYY/MM/DD'),'R2','C123');
+PROMPT ** tour 6 experts
+INSERT INTO expert_allocation VALUES(1,TO_DATE('2018/03/14', 'YYYY/MM/DD'),'B1');
+INSERT INTO expert_allocation VALUES(8,TO_DATE('2018/03/14', 'YYYY/MM/DD'),'B1');
+
+
+PROMPT ** brocure_request
+INSERT INTO brocure_request VALUES(TO_DATE('2017/06/19', 'YYYY/MM/DD'),'C267','W1');
+INSERT INTO brocure_request VALUES(TO_DATE('2018/08/19', 'YYYY/MM/DD'),'C215','B1');
+INSERT INTO brocure_request VALUES(TO_DATE('2017/09/15', 'YYYY/MM/DD'),'C225','B1');
+INSERT INTO brocure_request VALUES(TO_DATE('2017/09/15', 'YYYY/MM/DD'),'C225','R2');
+INSERT INTO brocure_request VALUES(TO_DATE('2017/09/15', 'YYYY/MM/DD'),'C225','W1');
+INSERT INTO brocure_request VALUES(TO_DATE('2018/01/05', 'YYYY/MM/DD'),'C218','B1');
+--INSERT INTO brocure_request VALUES(TO_DATE('2018/01/05', 'YYYY/MM/DD'),'C218','R1'); --broken?
+INSERT INTO brocure_request VALUES(TO_DATE('2018/01/06', 'YYYY/MM/DD'),'C334','B1');
+
+
+
+
+
+PROMPT ** PART 4
+
+PROMPT ** Q1
+INSERT INTO  expert_allocation VALUES(22,TO_DATE('2018/02/18', 'YYYY/MM/DD'),'B1');
+
+PROMPT ** Q2
+INSERT INTO booking VALUES(TO_DATE('2018/01/01', 'YYYY/MM/DD'),'W1','C078');
+
+PROMPT ** Q3
+INSERT INTO payment VALUES(TO_DATE('2018/01/01', 'YYYY/MM/DD'),'W1','C225',200,TO_DATE('2018/01/01', 'YYYY/MM/DD'),1);
+
+PROMPT ** Q4
+INSERT INTO gift_allocation VALUES('G109',TO_DATE('2018/01/01', 'YYYY/MM/DD'),'W1');
+
+PROMPT ** Q5
+INSERT INTO gift_selected VALUES('C123',TO_DATE('2018/10/07', 'YYYY/MM/DD'),'R2','G09');
+
+PROMPT ** PART 5
+
+PROMPT ** Q1
+SELECT * 
+FROM CUSTOMER
+ORDER BY c_id ASC;
+
+PROMPT ** Q2
+SELECT t_code,t_date,efname
+FROM expert_allocation E
+INNER JOIN wine_expert W
+ON E.e_id=W.e_id;
+
+PROMPT ** Q3
+SELECT t_code,t_date,B.c_id,C.fname
+FROM booking B
+INNER JOIN customer C
+ON C.c_id=B.c_id;
+
+PROMPT ** Q4 (almost works but has duplicate results)
+SELECT T.t_code,T.t_date,G.g_id,GG.gname
+FROM tour_offering T 
+INNER JOIN gift_allocation G
+ON G.t_date || G.t_code=T.t_date || T.t_code
+RIGHT OUTER JOIN gift GG
+ON GG.g_id=GG.g_id
+ORDER BY 1,2,3;
+
+PROMPT ** Q5
+--SELECT t_code,t_date,c_id,cfname,g_id,g_name
+

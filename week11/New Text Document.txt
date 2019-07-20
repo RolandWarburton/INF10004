@@ -1,0 +1,63 @@
+1.  
+a stored list of associated row numbers. it increases seach speed
+
+2.
+indexing by student number
+student number, 2, 6, 5, 4, 3, 1
+
+3.
+an index increases recovery time to query a database 
+
+4.
+index disadvantages include maintenance of the index and the need to constantly update the index after you change or add rows.
+
+5.
+CREATE INDEX name ON table(index_colum)
+
+6.
+DROP INDEX name
+
+7.
+CREATE INDEX name ON table(index_colum,index_colum2)
+
+8.
+use insert into
+
+9.
+a. no error message on the first 2. error message on the 3rd query
+b. you need to search every row. answer is 4
+c. 3
+
+10.
+a recursive relation ship is a relationship that a table has with itself. eg. some employees of a staff table are managers
+
+11.
+CREATE TABLE branch (
+	BNO VARCHAR(4),
+	BName VARCHAR(25),
+	PRIMARY KEY(BNO)
+);
+
+CREATE TABLE worker (
+	WNo NUMBER,
+	SURNAME VARCHAR(255),
+	Firstname VARCHAR(255),
+	SuperNO VARCHAR(4),
+	
+	PRIMARY KEY(WNo),
+	FOREIGN KEY(BNo) REFERENCES branch,
+	FOREIGN KEY(SuperNO) REFERENCES worker
+);
+
+12.
+INSERT INTO branch VALUES('B1','Branch 1');
+INSERT INTO branch VALUES('B2','Branch 2');
+
+13.
+INSERT INTO worker VALUES(wno,surname,firstname,bno,superno)
+
+14.
+SELECT W.firstname || W.surname as "workername", S.firstname || S.lastname
+FROM worker W
+left outer join worker S
+ON W.supervisorNo = S.WNo

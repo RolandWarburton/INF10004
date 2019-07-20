@@ -1,0 +1,46 @@
+QUESTION 1:
+customer(CNo,Cphone,Caddress,Cname)
+PK(Cno)
+
+Staff(SID,Sname,Sphone,Semail)
+PK(SID)
+
+Car(VID,Vmake,Vmodel,Vmanufacture,Vprice)
+PK(VID)
+
+Sale(Sale_ID,VID,SID,commission)
+PK(Sale_ID)
+FK(SID,VID)
+
+---------------------------------------------------
+QUESTION 2:
+Breed(name,desc,comments)
+PK(name)
+
+Treatment(treatment_NO,desc)
+PK(treatment_no)
+
+Drugs(drug_name,drug_id)
+PK(drug_id)
+
+Exam(date_time,treatment_no,Did,drug_id)
+PK(date_time)
+FK(Did) REFERENCES animal
+
+animal(did)
+PK(Did,breed,obtained,sex,type)
+
+adopt(date,add,name,Did,phone)
+PK(add,name,Did)
+
+Returns(name,add,date)
+PK(name,add,date)
+FK(name,add) REFERENCES adopt
+
+Topics(topic_code,desc)
+PK(topic_code)
+
+Enquire(name,add,date_time)
+PK(name,add)
+FK(name,add) REFERENCES topics
+

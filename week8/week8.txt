@@ -1,0 +1,68 @@
+THEORY QUESTIONS:
+1. 3
+
+2. a view is a prewritten statement that allows you to store a table to view later
+
+3. a view is created
+
+4. selects everything from the view
+
+5. peforms a filter on the view.
+
+6. 	
+	a.
+	b.
+	c.
+
+7.
+
+8. DROP VIEW [name]
+
+9. you cannot insert data into a view
+
+10. yes you can delete rows from a view. it also deletes it from the actual table
+you can add WITH READ ONLY on the bottom of the create view commant to prevent editing.
+
+11. 
+
+12.
+
+LAB QUESTIONS:
+1.
+SELECT *
+FROM movie 
+WHERE runtime>120 AND relyear BETWEEN 2000 AND 2010;
+
+2.
+CREATE VIEW mov2000 AS
+SELECT *
+FROM movie 
+WHERE runtime>120 AND relyear BETWEEN 2000 AND 2010;
+
+3.
+SELECT * FROM mov2000;
+
+4.
+SELECT * FROM mov2000
+WHERE rating_code='M';
+
+5.
+SELECT C.movieno,C.actorno,A.fullname,M.title,M.relyear
+FROM casting C
+INNER JOIN actor A
+ON A.actorno=C.actorno
+INNER JOIN movie M
+ON M.movieno=C.movieno;
+
+6.
+CREATE VIEW castview AS
+SELECT C.movieno,C.actorno,A.fullname,M.title,M.relyear
+FROM casting C
+INNER JOIN actor A
+ON A.actorno=C.actorno
+INNER JOIN movie M
+ON M.movieno=C.movieno;
+
+7.
+SELECT * FROM castview
+WHERE relyear=1999;

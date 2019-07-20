@@ -1,0 +1,5 @@
+1. a surrogate key is a artificial representation of data that is always unique.
+
+2. a surrogate key is used to ensure there is unique data to be used as a PK.
+
+3. No. surrogate keys are designed to be used only as a lsat resort because they are not natural data and cannot be used.

@@ -1,0 +1,50 @@
+tour(t_code,shortname,desc)
+PK (t_code) 
+
+customer(c_id,cfname,clname,cadd,cph)
+PK(c_id) 
+
+Wine_expert(E_no,Ename,Ephone)
+PK(E_no)
+
+Gift(G_id,Gname)
+PK(G_id)
+
+payment(c_id,amount,pdate,t_date,ptype,t_code)
+PK(c_id,t_code,pdate,t_date) 
+Fk (c_id ) references customer
+FK (t_code t_date) references tour_offering
+
+Brochure_request(request_date,send_date,c_id,t_code)
+PK(request_date,c_id)
+FK(t_code) references tour
+Fk(c_id) references customer
+
+tour_offering(t_date,t_code,desc,price)
+PK(t_date,t_code) 
+
+expert_allocation(E_no,t_date,t_code)
+PK(t_date,t_code)
+FK(E_no) references Wine_expert
+FK(t_date,t_code) references tour_offering
+
+booking (t_date,t_code,c_id,cfname,)
+PK(t_date,t_code,c_id) 
+Fk (c_id ) references customer
+FK (t_code t_date) references tour
+
+gift_allocation(g_id,t_date,t_code)
+PK(g_id,t_date,t_code)
+Fk (g_id ) references gift
+FK (t_code, t_date) references tour_offering
+
+
+gift_selected(cid,t_date,t_code,g_id)
+PK(cid,t_date,t_code,g_id)
+Fk (c_id ) references customer
+FK (t_code, t_date) references booking
+FK (g_id) references gift_allocation
+
+
+
+

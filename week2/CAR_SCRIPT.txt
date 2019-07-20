@@ -1,0 +1,15 @@
+DROP TABLE CAR;
+
+CREATE TABLE CAR(
+ 	CarId VARCHAR(64),
+	Model VARCHAR(100),
+	Kms NUMBER(8, 0),
+	PRIMARY KEY (CarID)
+);
+
+INSERT into CAR (CarId,Model,Kms) values('WSX040','Holden Magnum',23400);
+INSERT into CAR (CarId,Model,Kms) values('ABC123','Mazda',39500);
+INSERT into CAR (CarId,Model,Kms) values('PUG963','Toyota Blitz',14704);
+
+SELECT * FROM CAR ORDER BY CarId ASC;
+SELECT * FROM CAR WHERE Kms < 30000;

@@ -1,0 +1,24 @@
+<shape name="Decision" aspect="variable" strokewidth="inherit">
+  <connections>
+    <constraint x="0.5" y="0" perimeter="0" name="N"/>
+    <constraint x="0.5" y="1" perimeter="0" name="S"/>
+    <constraint x="0" y="0.5" perimeter="0" name="W"/>
+    <constraint x="1" y="0.5" perimeter="0" name="E"/>
+  </connections>
+  <background>
+    <path>
+      <move x="20" y="0"/>
+      <line x="80" y="0"/>
+
+      <line x="100" y="50"/>
+      <line x="80" y="100"/>
+
+      <line x="20" y="100"/>
+      <line x="0" y="50"/>
+      <close/>
+    </path>
+  </background>
+  <foreground>
+    <fillstroke/>
+  </foreground>
+</shape>

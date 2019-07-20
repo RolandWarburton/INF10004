@@ -1,0 +1,239 @@
+PROMPT *** QUESTION 2 ======================================
+
+WORKER(wid,workername)PRIMARY KEY(wid)
+TASK(taskid,taskdescript)PRIMARY KEY(taskid)
+
+DROP TABLE task;
+DROP TABLE worker;
+
+
+CREATE TABLE worker (
+	wid NUMBER(4),
+	workername VARCHAR(255),
+PRIMARY KEY(wid)
+);
+
+CREATE TABLE task (
+	taskid CHAR(1),
+	taskdescript VARCHAR(512),
+	wid NUMBER(4),
+PRIMARY KEY(taskid),
+FOREIGN KEY(wid) REFERENCES worker
+);
+
+INSERT INTO task VALUES('W','Cleaning',1);
+INSERT INTO task VALUES('X','Painting',2);
+INSERT INTO task VALUES('Y','Polishing',3);
+
+INSERT INTO worker VALUES(1,'Dave');
+INSERT INTO worker VALUES(2,'Emma');
+INSERT INTO worker VALUES(3,'Fred');
+
+SELECT T.taskdescript, W.workername
+FROM task T
+INNER JOIN 
+worker W
+ON T.wid=W.wid
+
+PROMPT *** QUESTION 2 ======================================
+
+a.
+location(areacode,section,locname)PRIMARY KEY(areacode,section)
+
+b.
+2 PK
+
+c.
+Area code and Section
+
+d.
+CREATE TABLE location (
+	areacode NUMBER(4),
+	section NUMBER(4),
+	locname VARCHAR(255),
+PRIMARY KEY(areacode,section)
+);
+
+PROMPT *** QUESTION 3 ======================================
+a.
+1 PK
+
+b.
+2 FK
+
+c.
+location(areacode,section,locname)PRIMARY KEY(areacode,section)
+
+d.
+employee(areacode,section,empid,empname)
+PRIMARY KEY(empid)
+FOREIGN KEY(areacode,section)
+
+e.
+CREATE TABLE employee (
+	empid NUMBER(4),
+	empname VARCHAR(255),
+	areacode NUMBER(4),
+	section NUMBER(4),
+PRIMARY KEY(empid),
+FOREIGN KEY(areacode,section) REFERENCES location
+);
+
+f.
+SELECT E.empname,L.locname
+FROM employee E
+INNER JOIN
+LOCATAION L
+ON E.empname = L.locname
+
+PROMPT *** QUESTION 4 ======================================
+Data inconsistiancy is bad for a database because it may create contradictorary logic within the database.
+
+PROMPT *** QUESTION 5 ======================================
+split and atomize the table by creating 2 tables, one for the workers and their salary and one for the branch. respective PK of WID and BRANCHID to identify each.
+
+PROMPT *** QUESTION 6 ======================================
+yes, should be split up into another table
+
+PROMPT *** QUESTION 7 ======================================
+yes, should be put into a branch table
+
+PROMPT *** QUESTION 8 ======================================
+updating a colum value might create an update anomaly that alters data in other colums of the table. ie. data will no longer make sense. To avoid an anomaly you should make sure that you only edit a parent.
+
+PROMPT *** QUESTION 9 ======================================
+worker(wid,wname,wgender,wsalary)PRIMARY KEY(wid);
+branch(branchid,branchchild,branchname,branchsize)PRIMARY KEY(branchid);
+
+PROMPT *** QUESTION 10 ======================================
+worker: number,varchar(255),varchar(2),number
+branch: number,varchar(2),varchar(255),number
+
+PROMPT *** QUESTION 11 ======================================
+a.
+0
+
+b.
+2
+
+c.
+DROP TABLE product;
+DROP TABLE country;
+
+CREATE TABLE country (
+	countryid NUMBER(2),
+	countryname VARCHAR(255),
+	designedcountryid NUMBER(5),
+	manufacturedcountryid NUMBER(5),
+PRIMARY KEY(designedcountryid,manufacturedcountryid)
+);
+
+CREATE TABLE product (
+	prodid NUMBER(3),
+	Prodname VARCHAR(255),
+	designedcountryid NUMBER(5),
+	manufacturedcountryid NUMBER(5),
+PRIMARY KEY(prodid),
+FOREIGN KEY(designedcountryid,manufacturedcountryid) REFERENCES country
+);
+
+PROMPT *** QUESTION 12 ======================================
+a.
+fred
+
+b.
+sue
+
+c.
+1 (location,deptid)
+
+d.
+2
+
+e.
+PRIMARY KEY(location,deptid)
+
+f.
+CREATE TABLE department (
+	location VARCHAR(64),
+	deptid NUMBER(2),
+	manager_name VARCHAR(64),
+PRIMARY KEY(location,deptid)
+);
+
+PROMPT *** Lab Questions ======================================
+1.
+done
+
+2.
+DROP TABLE employee;
+CREATE TABLE employee (
+Empid NUMBER PRIMARY KEY,
+Empname VARCHAR(20), 
+fav_colour VARCHAR(20), 
+salary NUMBER ,
+year_commenced NUMBER, 
+bonus NUMBER
+); 
+
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus) VALUES (1,
+'Sam', 'Red', 60000, 2004, 0);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus) VALUES (2,
+'Ellen', 'Blue', 75000, 2015, 5000);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus) VALUES (3,
+'Donna', 'Grey', 45000, 2013, 850);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus) VALUES (4,
+'Sam', 'Red', 65000, 1997, 5000);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus) VALUES (5,
+'Greg', 'Blue', 30000, 2015, 0);
+INSERT INTO employee (empid, empname, fav_colour, salary, year_commenced, bonus)
+VALUES (6, 'Sophie', 'Red', 88000, 2013, 2500);
+
+3.
+SELECT * FROM employee;
+
+4.
+SELECT empid,salary,bonus,salary+bonus AS total_income
+FROM employee
+
+5.
+UPDATE employee 
+SET bonus=0
+WHERE empid=3;
+
+6.
+UPDATE employee
+SET salary = 70000
+WHERE empid = 1;
+
+7.
+UPDATE employee
+SET salary = 80000,bonus=8550
+WHERE empid = 2
+
+8.
+done
+SELECT * FROM employee;
+
+9.
+UPDATE employee
+SET salary = salary*1.1
+WHERE empid = *
+
+10.
+done
+SELECT * FROM employee;
+
+11.
+DELETE FROM employee
+WHERE UPPER(fav_colour)='BLUE';
+
+12.
+done
+SELECT * FROM employee;
+
+
+
+BONUS QUESTION:
+DELETE FROM employee
+WHERE year_commenced='2013';

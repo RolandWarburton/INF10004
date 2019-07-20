@@ -1,0 +1,156 @@
+1.
+a.
+student(StuNo,StuName)
+PK(StuNo)
+
+subject(SubCode,SubName)
+PK(SubCode)
+
+enrolment(StuNo,SubCode,grade)
+PK(StuNo,SubCode)
+FK(StuNo) REFERENCES student
+FK(SubCode) REFERENCES subject
+
+b.
+StuNo,SubCode
+
+c.
+INSERT INTO student VALUES('STU101','Henry Bloggs');
+
+d.
+INSERT INTO subject VALUES('INF10004','Database Analysis and Design');
+
+e.
+INSERT INTO enrolment(StuNo,SubCode) VALUES('STU101','INF10004')
+
+f.
+UPDATE enrolment SET grade = 'N' WHERE StuNo = 'STU101';
+
+g.
+UPDATE enrolment SET grade = 'D' WHERE StuNo = 'STU101';
+
+h.
+NO Because there is only one colum for result. updating it would overwrite it
+
+2.
+person(pid,PersonName)
+PK(pid)
+
+equipment(ecode,Description)
+PK(ecode)
+
+loan(pid,ecode,LoanDate,ReturnDate)
+PK(pid,ecode,LoanDate)
+FK(pid) REFERENCES person
+FK(ecode) REFERENCES equipment
+
+b.
+pid,ecode,LoadDate
+
+c.
+INSERT INTO person VALUES('P357','Sue Jones');
+
+d.
+INSERT INTO equipment VALUES('DC100','Nikon Digital Camera');
+
+e.
+INSET INTO load VALUES('P357','DC100','6/1/2018','6/05/2018');
+
+f.
+INERT INTO VALUES('P357','DC100','6/20/2018','6/25/2018');
+
+g.
+INERT INTO VALUES('P357','DC100','7/20/2018','7/25/2018');
+
+3.
+a.
+DROP TABLE studentworkplace;
+DROP TABLE Studentbriefing_session;
+DROP TABLE student;
+DROP TABLE workplace;
+DROP TABLE briefing_session;
+
+
+CREATE TABLE student (
+StuNo NUMBER(3),
+Name VARCHAR(255),
+PRIMARY KEY(StuNo)
+);
+
+CREATE TABLE workplace (
+Organisation VARCHAR(255),
+Address VARCHAR(255),
+PRIMARY KEY(Organisation)
+);
+
+CREATE TABLE studentworkplace (
+StuNo NUMBER(3),
+Organisation VARCHAR(255),
+PRIMARY KEY(StuNo,Organisation),
+FOREIGN KEY(StuNo) REFERENCES student,
+FOREIGN KEY(Organisation) REFERENCES workplace
+);
+
+CREATE TABLE briefing_session (
+BDate VARCHAR(255),
+BTime VARCHAR(255),
+RoomNo NUMBER(3),
+PRIMARY KEY(BDate,BTime)
+);
+
+CREATE TABLE Studentbriefing_session (
+StuNo NUMBER(3),
+BDate VARCHAR(255),
+BTime VARCHAR(255),
+PRIMARY KEY(StuNo,BDate,BTime),
+FOREIGN KEY(BDate,BTime) REFERENCES briefing_session 
+);
+
+b.
+student(StuNo,name)
+PK(stuno)
+
+workplace(Organisation,address)
+PK(Organisation)
+
+studentworkplace()stuno,Organisation)
+PK(stuno,Organisation)
+FK(stuno) REFERENCES student
+FK(organisation) REFERENCES workplace
+
+briefing_session(bdat,btime,roomno)
+PK(bdate,btime)
+
+studentbriefingsession(stuno,bdate,btime)
+PK(stuno,bdate,btime)
+FK(bdate,btime) REFERENCES briefing_session
+
+4.
+an intersection entity is used in a M to M relationship to link two tables together with composite keys
+
+5.
+casting
+
+6.
+an entity with a single attribute
+
+7.
+dept
+
+8.
+SELECT stuname, stugender
+FROM student
+UNION
+SELECT staffname, staffgender 
+FROM staff
+
+9.
+SELECT * FROM attendance
+WHERE score<(select AVG(score) FROM attendence)
+
+10.
+SELECT S.staffname, P.semid
+FROM staff S
+LEFT OUTER JOIN presentation P
+ON S.StaffNo=P.semid
+ORDER BY S.staffname
